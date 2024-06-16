@@ -1,6 +1,6 @@
-namespace CoverLetterGeneratorAPI.Models
+namespace CoverLetterGeneratorAPI.DTOs
 {
-    public class CoverLetterRequest
+    public class CoverLetterRequestDto
     {
         public string JobListing { get; set; }
         public string Experience { get; set; }

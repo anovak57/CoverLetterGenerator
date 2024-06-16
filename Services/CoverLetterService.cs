@@ -1,5 +1,5 @@
 using System.Text.Json;
-using CoverLetterGenerator.Models;
+using CoverLetterGeneratorAPI.DTOs;
 using CoverLetterGeneratorAPI.Interfaces;
 using OpenAI.Chat;
 
@@ -10,7 +10,7 @@ namespace CoverLetterGeneratorAPI.Services
         private readonly IConfiguration _configuration;
         private readonly string _apiModel;
         private readonly string _apiKey;
-        private CoverLetterInstructions _instructions;
+        private CoverLetterInstructionsDto _instructions;
 
         public CoverLetterService(IConfiguration configuration)
         {
@@ -25,7 +25,7 @@ namespace CoverLetterGeneratorAPI.Services
         {
             string jsonFilePath = _configuration["CoverLetterConfigFilePath"];
             string jsonString = File.ReadAllText(jsonFilePath);
-            _instructions = JsonSerializer.Deserialize<CoverLetterInstructions>(jsonString);
+            _instructions = JsonSerializer.Deserialize<CoverLetterInstructionsDto>(jsonString);
         }
 
         public async Task<String> GenerateCoverLetterAsync(string jobListing, string experience)

@@ -1,6 +1,6 @@
-namespace CoverLetterGenerator.Models
+namespace CoverLetterGeneratorAPI.DTOs
 {
-    public class CoverLetterInstructions
+    public class CoverLetterInstructionsDto
     {
         public string GeneralInstructions { get; set; }
         public string Structure { get; set; }

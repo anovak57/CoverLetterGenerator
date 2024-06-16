@@ -1,5 +1,5 @@
+using CoverLetterGeneratorAPI.DTOs;
 using CoverLetterGeneratorAPI.Interfaces;
-using CoverLetterGeneratorAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoverLetterGeneratorAPI.Controllers
@@ -17,7 +17,7 @@ namespace CoverLetterGeneratorAPI.Controllers
         }
 
         [HttpPost("generate")]
-        public async Task<ActionResult<String>> GenerateCoverLetter([FromBody] CoverLetterRequest request)
+        public async Task<ActionResult<CoverLetterResponseDto>> GenerateCoverLetter([FromBody] CoverLetterRequestDto request)
         {
             if (request == null)
             {
