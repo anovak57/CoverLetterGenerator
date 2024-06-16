@@ -1,5 +1,5 @@
-using CoverLetterGeneratorAPI.Interfaces;
-using CoverLetterGeneratorAPI.Services;
+using src.Interfaces;
+using src.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +9,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("./appsettings.Development.json", optional: false, reloadOnChange: true);
 
 builder.Services.AddScoped<ICoverLetterService, CoverLetterService>();
 

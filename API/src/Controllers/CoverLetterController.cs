@@ -1,5 +1,5 @@
-using CoverLetterGeneratorAPI.DTOs;
-using CoverLetterGeneratorAPI.Interfaces;
+using src.DTOs;
+using src.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoverLetterGeneratorAPI.Controllers

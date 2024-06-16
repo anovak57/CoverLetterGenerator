@@ -1,4 +1,4 @@
-namespace CoverLetterGeneratorAPI.DTOs
+namespace src.DTOs
 {
     public class CoverLetterResponseDto
     {

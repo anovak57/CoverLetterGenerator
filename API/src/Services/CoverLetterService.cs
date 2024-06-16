@@ -1,9 +1,9 @@
 using System.Text.Json;
-using CoverLetterGeneratorAPI.DTOs;
-using CoverLetterGeneratorAPI.Interfaces;
+using src.DTOs;
+using src.Interfaces;
 using OpenAI.Chat;
 
-namespace CoverLetterGeneratorAPI.Services
+namespace src.Services
 {
     public class CoverLetterService : ICoverLetterService
     {

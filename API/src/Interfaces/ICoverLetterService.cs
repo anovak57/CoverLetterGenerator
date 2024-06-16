@@ -1,4 +1,4 @@
-namespace CoverLetterGeneratorAPI.Interfaces
+namespace src.Interfaces
 {
     public interface ICoverLetterService
     {

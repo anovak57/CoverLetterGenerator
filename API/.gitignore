@@ -13,3 +13,5 @@ appsettings.Development.json
 project.lock.json
 project.fragment.lock.json
 artifacts/
+
+Properties/
