@@ -17,7 +17,7 @@ namespace CoverLetterGeneratorAPI.Controllers
         }
 
         [HttpPost("generate")]
-        public async Task<ActionResult<CoverLetterResponse>> GenerateCoverLetter([FromBody] CoverLetterRequest request)
+        public async Task<ActionResult<String>> GenerateCoverLetter([FromBody] CoverLetterRequest request)
         {
             if (request == null)
             {
