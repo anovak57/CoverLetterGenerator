@@ -1,4 +1,3 @@
-using System.Text.Json;
 using src.DTOs;
 using src.Interfaces;
 using OpenAI.Chat;
@@ -7,38 +6,46 @@ namespace src.Services
 {
     public class CoverLetterService : ICoverLetterService
     {
+        private readonly IFileReaderService _reader;
+        private readonly IChatClient _chatClient;
         private readonly IConfiguration _configuration;
-        private readonly string _apiModel;
-        private readonly string _apiKey;
-        private CoverLetterInstructionsDto _instructions;
 
-        public CoverLetterService(IConfiguration configuration)
+        public CoverLetterService(IConfiguration configuration, IFileReaderService reader, IChatClient chatClient)
         {
+            _reader = reader;
+            _chatClient = chatClient;
             _configuration = configuration;
-            _apiModel = _configuration["OpenAI:GptModel"];
-            _apiKey = _configuration["OpenAI:ApiKey"];
-
-            LoadCoverLetterInstructions();
         }
 
-        private void LoadCoverLetterInstructions()
+        public async Task<string> GenerateCoverLetterAsync(string jobListing, string experience)
         {
-            string jsonFilePath = _configuration["CoverLetterConfigFilePath"];
-            string jsonString = File.ReadAllText(jsonFilePath);
-            _instructions = JsonSerializer.Deserialize<CoverLetterInstructionsDto>(jsonString);
+            if (string.IsNullOrWhiteSpace(jobListing))
+            {
+                throw new ArgumentException("Job listing is required.", nameof(jobListing));
+            }
+
+            if (string.IsNullOrWhiteSpace(experience))
+            {
+                throw new ArgumentException("Experience is required.", nameof(experience));
+            }
+
+            CoverLetterInstructionsDto instructions = await GetInstructionsAsync();
+
+            string gptPrompt = BuildGptPrompt(jobListing, experience, instructions);
+
+            return await _chatClient.CompleteChatAsync(gptPrompt);
         }
 
-        public async Task<String> GenerateCoverLetterAsync(string jobListing, string experience)
+        private async Task<CoverLetterInstructionsDto> GetInstructionsAsync()
         {
-            string GptPrompt = $"Generate a cover letter for a job listing: {jobListing}. Experience: {experience}. " +
-                               $"Follow these general instructions: {_instructions.GeneralInstructions}. " +
-                               $"More detailed instructions: {_instructions.Structure}";
+            return await _reader.ReadFileAsync<CoverLetterInstructionsDto>(_configuration["CoverLetterConfigFilePath"]);
+        }
 
-            ChatClient client = new(model: _apiModel, _apiKey);
-
-            ChatCompletion completion = await Task.Run(() => client.CompleteChat(GptPrompt));
-            
-            return completion.ToString();
+        private static string BuildGptPrompt(string jobListing, string experience, CoverLetterInstructionsDto instructions)
+        {
+            return $"Generate a cover letter for a job listing: {jobListing}. Experience: {experience}. " +
+                   $"Follow these general instructions: {instructions.GeneralInstructions}. " +
+                   $"More detailed instructions: {instructions.Structure}";
         }
     }
 }

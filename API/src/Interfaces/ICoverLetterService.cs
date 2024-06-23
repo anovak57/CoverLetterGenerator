@@ -2,6 +2,6 @@ namespace src.Interfaces
 {
     public interface ICoverLetterService
     {
-        Task<String> GenerateCoverLetterAsync(string jobListing, string experience);
+        Task<string> GenerateCoverLetterAsync(string jobListing, string experience);
     }
 }

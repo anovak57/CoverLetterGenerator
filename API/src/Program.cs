@@ -12,6 +12,11 @@ builder.Services.AddSwaggerGen();
 builder.Configuration.AddJsonFile("./appsettings.Development.json", optional: false, reloadOnChange: true);
 
 builder.Services.AddScoped<ICoverLetterService, CoverLetterService>();
+builder.Services.AddScoped<IFileReaderService, FileReaderService>();
+builder.Services.AddSingleton<IChatClient>(sp => new ChatClientWrapper(
+        sp.GetRequiredService<IConfiguration>()["OpenAI:GptModel"],
+        sp.GetRequiredService<IConfiguration>()["OpenAI:ApiKey"]
+    ));
 
 var app = builder.Build();
 
