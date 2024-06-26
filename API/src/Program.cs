@@ -1,4 +1,5 @@
 using src.Interfaces;
+using src.Middleware;
 using src.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,8 @@ builder.Services.AddSingleton<IChatClient>(sp => new ChatClientWrapper(
     ));
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
