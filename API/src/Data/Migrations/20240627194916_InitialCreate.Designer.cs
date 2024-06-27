@@ -10,7 +10,7 @@ using src.Data;
 namespace CoverLetterGeneratorAPI.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240627182309_InitialCreate")]
+    [Migration("20240627194916_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,6 +24,9 @@ namespace CoverLetterGeneratorAPI.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("JobListing")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Letter")
                         .HasColumnType("TEXT");

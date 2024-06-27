@@ -22,6 +22,9 @@ namespace CoverLetterGeneratorAPI.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("JobListing")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Letter")
                         .HasColumnType("TEXT");
 

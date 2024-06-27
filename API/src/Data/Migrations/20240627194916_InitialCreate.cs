@@ -17,7 +17,8 @@ namespace CoverLetterGeneratorAPI.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", nullable: true),
-                    Letter = table.Column<string>(type: "TEXT", nullable: true)
+                    Letter = table.Column<string>(type: "TEXT", nullable: true),
+                    JobListing = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

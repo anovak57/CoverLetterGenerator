@@ -26,6 +26,9 @@ builder.Services.AddSingleton<IChatClient>(sp => new ChatClientWrapper(
         sp.GetRequiredService<IConfiguration>()["OpenAI:ApiKey"]
     ));
 
+builder.Services.AddScoped<ICoverLetterRepository, CoverLetterRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
