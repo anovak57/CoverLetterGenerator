@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using src.Data;
 using src.Interfaces;
 using src.Middleware;
 using src.Services;
@@ -11,6 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddJsonFile("./appsettings.Development.json", optional: false, reloadOnChange: true);
+
+builder.Services.AddDbContext<AppDbContext>(option => 
+{
+    option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.Services.AddScoped<ICoverLetterService, CoverLetterService>();
 builder.Services.AddScoped<IFileReaderService, FileReaderService>();
