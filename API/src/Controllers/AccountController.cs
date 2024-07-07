@@ -1,17 +1,17 @@
+using CoverLetterGeneratorAPI.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using src.DTOs;
+using src.Models;
 
 namespace src.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class AccountController : ControllerBase
+public class AccountController : BaseApiController
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<AppUser> _userManager;
+    private readonly SignInManager<AppUser> _signInManager;
 
-    public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -22,7 +22,7 @@ public class AccountController : ControllerBase
     {
         if (ModelState.IsValid)
         {
-            var user = new IdentityUser { UserName = registerModel.Email, Email = registerModel.Email };
+            var user = new AppUser { UserName = registerModel.Email, Email = registerModel.Email };
             var result = await _userManager.CreateAsync(user, registerModel.Password);
             if (result.Succeeded)
             {
@@ -50,6 +50,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("logout")]
+    [Authorize(Policy = "RequireAuthenticatedUser")]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();

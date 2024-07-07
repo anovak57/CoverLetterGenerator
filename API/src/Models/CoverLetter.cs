@@ -9,4 +9,8 @@ public class CoverLetter
     public string Title { get; set; }
     public string Letter { get; set; }
     public string JobListing { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public string UserId { get; set; }
+    public AppUser User { get; set; }
 }

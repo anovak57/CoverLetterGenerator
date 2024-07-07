@@ -3,26 +3,30 @@ using src.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using src.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CoverLetterGeneratorAPI.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class CoverLetterController : ControllerBase
+[Authorize(Policy = "RequireAuthenticatedUser")]
+public class CoverLetterController : BaseApiController
 {
 
     private readonly ICoverLetterService _coverLetterService;
     private readonly ICoverLetterRepository _coverLetterRepository;
     private readonly IMapper _mapper;
+    private readonly UserManager<AppUser> _userManager;
 
-    public CoverLetterController(ICoverLetterService coverLetterService, ICoverLetterRepository coverLetterRepository, IMapper mapper)
+    public CoverLetterController(ICoverLetterService coverLetterService, ICoverLetterRepository coverLetterRepository, IMapper mapper, UserManager<AppUser> userManager)
     {
         _coverLetterService = coverLetterService;
         _coverLetterRepository = coverLetterRepository;
         _mapper = mapper;
+        _userManager = userManager;
     }
 
     [HttpPost("generate")]
+    [AllowAnonymous]
     public async Task<ActionResult<CoverLetterResponseDto>> GenerateCoverLetter([FromBody] CoverLetterRequestDto request)
     {
         if (request == null)
@@ -53,7 +57,9 @@ public class CoverLetterController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CoverLetterDto>>> GetCoverLetters()
     {
-        var coverLetters = await _coverLetterRepository.GetCoverLetters();
+        var user = await _userManager.GetUserAsync(User);
+
+        var coverLetters = await _coverLetterRepository.GetCoverLetters(user.Id);
 
         var coverLetterDtos = _mapper.Map<IEnumerable<CoverLetterDto>>(coverLetters);
 
@@ -66,6 +72,9 @@ public class CoverLetterController : ControllerBase
     {
 
         var coverLetter = _mapper.Map<CoverLetter>(coverLetterDto);
+        var user = await _userManager.GetUserAsync(User);
+
+        coverLetter.UserId = user.Id;
 
         _coverLetterRepository.AddCoverLetter(coverLetter);
 

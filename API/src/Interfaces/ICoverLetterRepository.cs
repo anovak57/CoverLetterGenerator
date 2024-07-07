@@ -6,7 +6,7 @@ public interface ICoverLetterRepository
 {
     void AddCoverLetter(CoverLetter coverLetter);
     void RemoveCoverLetter(CoverLetter coverLetter);
-    Task<IEnumerable<CoverLetter>> GetCoverLetters();
+    Task<IEnumerable<CoverLetter>> GetCoverLetters(string userId);
     Task<CoverLetter> GetCoverLetterById(int id);
     Task<int> SaveChangesAsync();
 }

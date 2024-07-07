@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using src.Data;
 using src.Interfaces;
 using src.Middleware;
+using src.Models;
 using src.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<AppUser, IdentityRole>()
         .AddEntityFrameworkStores<AppDbContext>()
         .AddDefaultTokenProviders();
 
@@ -35,6 +36,10 @@ builder.Services.Configure<IdentityOptions>(options =>
 
     options.User.RequireUniqueEmail = true;
 });
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("RequireAuthenticatedUser", policy =>
+        policy.RequireAuthenticatedUser());
 
 builder.Services.AddScoped<ICoverLetterService, CoverLetterService>();
 builder.Services.AddScoped<IFileReaderService, FileReaderService>();

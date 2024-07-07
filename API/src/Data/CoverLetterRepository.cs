@@ -23,9 +23,11 @@ public class CoverLetterRepository : ICoverLetterRepository
         _context.CoverLetters.Remove(coverLetter);
     }
 
-    public async Task<IEnumerable<CoverLetter>> GetCoverLetters()
+    public async Task<IEnumerable<CoverLetter>> GetCoverLetters(string userId)
     {
-        return await _context.CoverLetters.ToListAsync();
+        return await _context.CoverLetters
+                            .Where(cl => cl.UserId == userId)
+                            .ToListAsync();
     }
 
     public async Task<CoverLetter> GetCoverLetterById(int id)
