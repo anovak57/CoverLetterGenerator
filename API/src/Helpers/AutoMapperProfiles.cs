@@ -9,6 +9,7 @@ namespace src.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<CoverLetterDto, CoverLetter>();
+            CreateMap<CoverLetter, CoverLetterDto>();
         }
     }
 }

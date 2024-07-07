@@ -35,6 +35,31 @@ namespace CoverLetterGeneratorAPI.Controllers
             return Ok(coverLetter);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CoverLetterDto>> GetCoverLetterById(int id)
+        {
+            var coverLetter = await _coverLetterRepository.GetCoverLetterById(id);
+
+            if(coverLetter == null)
+            {
+                return NotFound("Requested cover letter does not exist");
+            }
+
+            var coverLetterDtos = _mapper.Map<CoverLetterDto>(coverLetter);
+
+            return Ok(coverLetterDtos);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CoverLetterDto>>> GetCoverLetters()
+        {
+            var coverLetters = await _coverLetterRepository.GetCoverLetters();
+
+            var coverLetterDtos = _mapper.Map<IEnumerable<CoverLetterDto>>(coverLetters);
+
+            return Ok(coverLetterDtos);
+        }
+
 
         [HttpPost("save")]
         public async Task<ActionResult<CoverLetterDto>> SaveCoverLetter([FromBody] CoverLetterDto coverLetterDto)
@@ -52,6 +77,27 @@ namespace CoverLetterGeneratorAPI.Controllers
             }
 
             return BadRequest("Failed to create CoverLetter.");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteCoverLetter(int id){
+            var coverLetter = await _coverLetterRepository.GetCoverLetterById(id);
+
+            if (coverLetter == null) 
+            {
+                return BadRequest("Requested cover letter does not exist");
+            }
+
+            _coverLetterRepository.RemoveCoverLetter(coverLetter);
+
+            int result = await _coverLetterRepository.SaveChangesAsync();
+
+            if (result > 0)
+            {
+                return NoContent();
+            }
+
+            return BadRequest("Failed to delete cover letter");
         }
     }
 }
