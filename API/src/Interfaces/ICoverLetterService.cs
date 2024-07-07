@@ -1,7 +1,6 @@
-namespace src.Interfaces
+namespace src.Interfaces;
+
+public interface ICoverLetterService
 {
-    public interface ICoverLetterService
-    {
-        Task<string> GenerateCoverLetterAsync(string jobListing, string experience);
-    }
+    Task<string> GenerateCoverLetterAsync(string jobListing, string experience);
 }

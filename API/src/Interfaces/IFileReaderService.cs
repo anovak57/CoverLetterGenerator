@@ -1,7 +1,6 @@
-namespace src.Interfaces
+namespace src.Interfaces;
+
+public interface IFileReaderService
 {
-    public interface IFileReaderService
-    {
-        Task<T> ReadFileAsync<T>(string path);
-    }
+    Task<T> ReadFileAsync<T>(string path);
 }

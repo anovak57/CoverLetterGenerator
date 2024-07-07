@@ -1,8 +1,7 @@
-namespace src.DTOs
+namespace src.DTOs;
+
+public class CoverLetterInstructionsDto
 {
-    public class CoverLetterInstructionsDto
-    {
-        public string GeneralInstructions { get; set; }
-        public string Structure { get; set; }
-    }
+    public string GeneralInstructions { get; set; }
+    public string Structure { get; set; }
 }

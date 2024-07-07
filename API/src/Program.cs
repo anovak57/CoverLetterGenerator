@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using src.Data;
 using src.Interfaces;
@@ -14,9 +15,25 @@ builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddJsonFile("./appsettings.Development.json", optional: false, reloadOnChange: true);
 
-builder.Services.AddDbContext<AppDbContext>(option => 
+builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+        .AddEntityFrameworkStores<AppDbContext>()
+        .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+
+    options.User.RequireUniqueEmail = true;
 });
 
 builder.Services.AddScoped<ICoverLetterService, CoverLetterService>();
@@ -40,7 +57,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

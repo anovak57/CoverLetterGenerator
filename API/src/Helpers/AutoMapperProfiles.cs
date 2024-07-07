@@ -2,14 +2,13 @@ using AutoMapper;
 using src.DTOs;
 using src.Models;
 
-namespace src.Helpers
+namespace src.Helpers;
+
+public class AutoMapperProfiles : Profile
 {
-    public class AutoMapperProfiles : Profile
+    public AutoMapperProfiles()
     {
-        public AutoMapperProfiles()
-        {
-            CreateMap<CoverLetterDto, CoverLetter>();
-            CreateMap<CoverLetter, CoverLetterDto>();
-        }
+        CreateMap<CoverLetterDto, CoverLetter>();
+        CreateMap<CoverLetter, CoverLetterDto>();
     }
 }

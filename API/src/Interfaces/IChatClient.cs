@@ -1,9 +1,6 @@
-using OpenAI.Chat;
+namespace src.Interfaces;
 
-namespace src.Interfaces
+public interface IChatClient
 {
-    public interface IChatClient
-    {
-        Task<string> CompleteChatAsync(string prompt);
-    }
+    Task<string> CompleteChatAsync(string prompt);
 }

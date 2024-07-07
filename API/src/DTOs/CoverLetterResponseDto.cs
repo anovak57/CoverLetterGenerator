@@ -1,7 +1,6 @@
-namespace src.DTOs
+namespace src.DTOs;
+
+public class CoverLetterResponseDto
 {
-    public class CoverLetterResponseDto
-    {
-        public string CoverLetter { get; set; }
-    }
+    public string CoverLetter { get; set; }
 }
