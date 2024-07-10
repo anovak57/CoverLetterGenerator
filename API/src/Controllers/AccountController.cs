@@ -20,33 +20,39 @@ public class AccountController : BaseApiController
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerModel)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var user = new AppUser { UserName = registerModel.Email, Email = registerModel.Email };
-            var result = await _userManager.CreateAsync(user, registerModel.Password);
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return Ok("Registration successful");
-            }
+            return BadRequest(ModelState);
+        }
+
+        var user = new AppUser { UserName = registerModel.Email, Email = registerModel.Email };
+        var result = await _userManager.CreateAsync(user, registerModel.Password);
+
+        if (!result.Succeeded)
+        {
             return BadRequest(result.Errors);
         }
-        return BadRequest(ModelState);
+
+        await _signInManager.SignInAsync(user, isPersistent: false);
+        return Ok("Registration successful");
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto loginModel)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var result = await _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: false);
-            if (result.Succeeded)
-            {
-                return Ok("Login successful");
-            }
+            return BadRequest(ModelState);
+        }
+
+        var result = await _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: false);
+        
+        if (!result.Succeeded)
+        {
             return Unauthorized("Invalid login attempt");
         }
-        return BadRequest(ModelState);
+
+        return Ok("Login successful");
     }
 
     [HttpPost("logout")]

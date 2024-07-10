@@ -29,7 +29,7 @@ public class CoverLetterController : BaseApiController
     [AllowAnonymous]
     public async Task<ActionResult<CoverLetterResponseDto>> GenerateCoverLetter([FromBody] CoverLetterRequestDto request)
     {
-        if (request == null)
+        if (request is null)
         {
             return BadRequest("Invalid input");
         }
@@ -44,7 +44,7 @@ public class CoverLetterController : BaseApiController
     {
         var coverLetter = await _coverLetterRepository.GetCoverLetterById(id);
 
-        if(coverLetter == null)
+        if(coverLetter is null)
         {
             return NotFound("Requested cover letter does not exist");
         }
@@ -92,7 +92,7 @@ public class CoverLetterController : BaseApiController
     public async Task<ActionResult> DeleteCoverLetter(int id){
         var coverLetter = await _coverLetterRepository.GetCoverLetterById(id);
 
-        if (coverLetter == null) 
+        if (coverLetter is null) 
         {
             return BadRequest("Requested cover letter does not exist");
         }
