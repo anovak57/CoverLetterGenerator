@@ -1,0 +1,35 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# Node modules
+/node_modules
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+
+# Sensitive or environment-specific files
+/src/environments/*.ts
+src/environments/*.js
+
+# IDE/Editor specific files
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# Dependency directories
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Sass cache
+.sass-cache
+
+# Logs and databases
+*.log
+*.sqlite
+
+# Miscellaneous
+*.swp
+*.swo
+*.DS_Store
