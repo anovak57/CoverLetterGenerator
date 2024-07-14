@@ -1,0 +1,17 @@
+<div class="cover-container">
+  <div class="input-section">
+    <textarea placeholder="Job Listing" [(ngModel)]="jobListing" name="jobListing"></textarea>
+    <textarea placeholder="Your Experience" [(ngModel)]="experience" name="experience"></textarea>
+  </div>
+  <div class="button-section">
+    <button class="circle-button" (click)="generateCoverLetter()">
+      <i class="arrow"></i>
+    </button>
+  </div>
+  <div class="output-section">
+    <div *ngIf="coverLetter" class="cover-letter">
+      <h2>Your Cover Letter</h2>
+      <p>{{ coverLetter }}</p>
+    </div>
+  </div>
+</div>
