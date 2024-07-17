@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="sidebar">
+    <ul>
+      <li *ngFor="let coverLetter of coverLetters" 
+          (click)="selectCoverLetter(coverLetter)" 
+          [class.selected]="coverLetter === selectedCoverLetter">
+        {{ coverLetter.title }}
+      </li>
+    </ul>
+  </div>
+  <div class="content">
+    <div class="job-listing" [class.expanded]="showFullJobDescription">
+      <h2>{{ selectedCoverLetter?.jobTitle }}</h2>
+      <button class="toggle-button" (click)="toggleJobDescription()">
+        <i [class.fa-chevron-up]="showFullJobDescription" 
+           [class.fa-chevron-down]="!showFullJobDescription" 
+           class="fas"></i>
+      </button>
+      <p class="description" *ngIf="showFullJobDescription">{{ selectedCoverLetter?.jobDescription }}</p>
+    </div>
+    <div class="cover-letter">
+      <h3>Cover Letter</h3>
+      <p>{{ selectedCoverLetter?.content }}</p>
+    </div>
+  </div>
+</div>

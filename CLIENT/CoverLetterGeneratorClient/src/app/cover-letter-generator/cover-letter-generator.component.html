@@ -12,6 +12,21 @@
     <div *ngIf="coverLetter" class="cover-letter">
       <h2>Your Cover Letter</h2>
       <p>{{ coverLetter }}</p>
+      <div class="button-container">
+        <button class="save-button" (click)="openModal()">Save</button>
+        <button class="copy-button" (click)="copyToClipboard()">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isModalOpen" class="modal">
+    <div class="modal-content">
+      <h2>Set Cover Letter Title</h2>
+      <input type="text" class="title-input" placeholder="Cover Letter Title" [(ngModel)]="coverLetterTitle" />
+      <div class="modal-buttons">
+        <button class="cancel-button" (click)="closeModal()">Cancel</button>
+        <button class="create-button" (click)="saveCoverLetter()">Create</button>
+      </div>
     </div>
   </div>
 </div>

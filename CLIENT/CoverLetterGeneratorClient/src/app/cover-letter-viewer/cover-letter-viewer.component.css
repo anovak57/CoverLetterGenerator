@@ -1,0 +1,95 @@
+.container {
+  display: flex;
+  height: calc(100vh - 50px);
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  width: 20%;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  margin-bottom: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.sidebar ul li.selected {
+  background-color: #fc8672;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar ul li:hover {
+  background-color: #ff6347;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f1f1f1;
+  overflow-y: auto;
+  max-width: 76%;
+}
+
+.job-listing {
+  background-color: white;
+  color: black;
+  padding: 20px;
+  border-radius: 4px;
+  position: relative;
+  transition: max-height 0.3s;
+  display: flex;
+  flex-direction: column;
+  min-height: 3%;
+}
+
+.job-listing h2 {
+  margin: 0;
+  display: inline-block;
+  color: #ff4b2b;
+}
+
+.job-listing .description {
+  margin: 10px 0 0 0;
+  display: block;
+}
+
+.job-listing .toggle-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #ff6347;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.cover-letter {
+  margin-top: 20px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.cover-letter h3 {
+  margin-top: 0;
+}
