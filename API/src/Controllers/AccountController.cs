@@ -1,8 +1,8 @@
-using CoverLetterGeneratorAPI.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using src.DTOs;
+using src.Interfaces;
 using src.Models;
 
 namespace src.Controllers;
@@ -10,11 +10,13 @@ public class AccountController : BaseApiController
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly IUserInstructionsRepository _instructionRepository;
 
-    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IUserInstructionsRepository instructionsRepository)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _instructionRepository = instructionsRepository;
     }
 
     [HttpPost("register")]
@@ -31,6 +33,16 @@ public class AccountController : BaseApiController
         if (!result.Succeeded)
         {
             return BadRequest(result.Errors);
+        }
+
+        var userInstructions = new CustomUserInstructions() { UserId = user.Id, Instructions = "" };
+        _instructionRepository.AddAsync(userInstructions);
+
+        int instructionsResult = await _instructionRepository.SaveChangesAsync();
+
+        if (instructionsResult <= 0)
+        {
+            return BadRequest("Error saving user instructions");
         }
 
         await _signInManager.SignInAsync(user, isPersistent: false);

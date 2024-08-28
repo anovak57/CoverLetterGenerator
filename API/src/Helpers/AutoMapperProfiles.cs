@@ -10,5 +10,6 @@ public class AutoMapperProfiles : Profile
     {
         CreateMap<CoverLetterDto, CoverLetter>();
         CreateMap<CoverLetter, CoverLetterDto>();
+        CreateMap<CustomUserInstructions, UserInstructionsDto>();
     }
 }

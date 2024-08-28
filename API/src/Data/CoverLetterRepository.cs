@@ -13,14 +13,23 @@ public class CoverLetterRepository : ICoverLetterRepository
         _context = context;
     }
 
-    public void AddCoverLetter(CoverLetter coverLetter)
+    public async void AddCoverLetter(CoverLetter coverLetter)
     {
-        _context.CoverLetters.Add(coverLetter);
+        await _context.CoverLetters.AddAsync(coverLetter);
     }
 
-    public void RemoveCoverLetter(CoverLetter coverLetter)
+    public async Task<bool> RemoveCoverLetterById(int id)
     {
+        var coverLetter = await GetCoverLetterById(id);
+
+        if (coverLetter == null)
+        {
+            return false;
+        }
+
         _context.CoverLetters.Remove(coverLetter);
+
+        return true;
     }
 
     public async Task<IEnumerable<CoverLetter>> GetCoverLetters(string userId)

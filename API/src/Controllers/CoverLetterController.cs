@@ -6,7 +6,7 @@ using src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
-namespace CoverLetterGeneratorAPI.Controllers;
+namespace src.Controllers;
 
 [Authorize(Policy = "RequireAuthenticatedUser")]
 public class CoverLetterController : BaseApiController
@@ -14,13 +14,20 @@ public class CoverLetterController : BaseApiController
 
     private readonly ICoverLetterService _coverLetterService;
     private readonly ICoverLetterRepository _coverLetterRepository;
+    private readonly IUserInstructionsRepository _instructionRepository;
     private readonly IMapper _mapper;
     private readonly UserManager<AppUser> _userManager;
 
-    public CoverLetterController(ICoverLetterService coverLetterService, ICoverLetterRepository coverLetterRepository, IMapper mapper, UserManager<AppUser> userManager)
+    public CoverLetterController(
+        ICoverLetterService coverLetterService,
+        ICoverLetterRepository coverLetterRepository,
+        IUserInstructionsRepository instructionsRepository,
+        IMapper mapper,
+        UserManager<AppUser> userManager)
     {
         _coverLetterService = coverLetterService;
         _coverLetterRepository = coverLetterRepository;
+        _instructionRepository = instructionsRepository;
         _mapper = mapper;
         _userManager = userManager;
     }
@@ -34,7 +41,10 @@ public class CoverLetterController : BaseApiController
             return BadRequest("Invalid input");
         }
 
-        var coverLetter = await _coverLetterService.GenerateCoverLetterAsync(request.JobListing, request.Experience);
+        var user = await _userManager.GetUserAsync(User);
+        var instructions = user.UserInstructions.Instructions;
+
+        var coverLetter = await _coverLetterService.GenerateCoverLetterAsync(request.JobListing, request.Experience, instructions);
 
         return Ok(coverLetter);
     }
@@ -44,7 +54,7 @@ public class CoverLetterController : BaseApiController
     {
         var coverLetter = await _coverLetterRepository.GetCoverLetterById(id);
 
-        if(coverLetter is null)
+        if (coverLetter is null)
         {
             return NotFound("Requested cover letter does not exist");
         }
@@ -89,23 +99,46 @@ public class CoverLetterController : BaseApiController
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteCoverLetter(int id){
-        var coverLetter = await _coverLetterRepository.GetCoverLetterById(id);
+    public async Task<ActionResult> DeleteCoverLetter(int id)
+    {
+        var success = await _coverLetterRepository.RemoveCoverLetterById(id);
 
-        if (coverLetter is null) 
+        if (success)
         {
-            return BadRequest("Requested cover letter does not exist");
+            return NoContent();
         }
 
-        _coverLetterRepository.RemoveCoverLetter(coverLetter);
+        return BadRequest("Failed to delete cover letter");
+    }
 
-        int result = await _coverLetterRepository.SaveChangesAsync();
+    [HttpGet("instructions")]
+    public async Task<ActionResult<UserInstructionsDto>> GetUserInstructions()
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        var instructions = await _instructionRepository.GetByUserIdAsync(user.Id);
+
+        var instructionsDto = _mapper.Map<UserInstructionsDto>(instructions);
+
+        return Ok(instructionsDto);
+    }
+
+    [HttpPut("instructions/save")]
+    public async Task<ActionResult<UserInstructionsDto>> UpdateUserInstructions([FromBody] UserInstructionsDto userInstructionsDto)
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        var instructions = userInstructionsDto.Instructions;
+
+        _instructionRepository.UpdateAsync(user.Id, instructions);
+
+        int result = await _instructionRepository.SaveChangesAsync();
 
         if (result > 0)
         {
             return NoContent();
         }
 
-        return BadRequest("Failed to delete cover letter");
+        return BadRequest("Error saving the user instructions");
     }
 }

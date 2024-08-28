@@ -16,7 +16,7 @@ public class CoverLetterService : ICoverLetterService
         _configuration = configuration;
     }
 
-    public async Task<string> GenerateCoverLetterAsync(string jobListing, string experience)
+    public async Task<string> GenerateCoverLetterAsync(string jobListing, string experience, string userInstructions)
     {
         if (string.IsNullOrWhiteSpace(jobListing))
         {
@@ -28,9 +28,9 @@ public class CoverLetterService : ICoverLetterService
             throw new ArgumentException("Experience is required.", nameof(experience));
         }
 
-        CoverLetterInstructionsDto instructions = await GetInstructionsAsync();
+        CoverLetterInstructionsDto defaultInstructions = await GetInstructionsAsync();
 
-        string gptPrompt = BuildGptPrompt(jobListing, experience, instructions);
+        string gptPrompt = BuildGptPrompt(jobListing, experience, defaultInstructions, userInstructions);
 
         return await _chatClient.CompleteChatAsync(gptPrompt);
     }
@@ -40,10 +40,11 @@ public class CoverLetterService : ICoverLetterService
         return await _reader.ReadFileAsync<CoverLetterInstructionsDto>(_configuration["CoverLetterConfigFilePath"]);
     }
 
-    private static string BuildGptPrompt(string jobListing, string experience, CoverLetterInstructionsDto instructions)
+    private static string BuildGptPrompt(string jobListing, string experience, CoverLetterInstructionsDto instructions, string userInstructions)
     {
         return $"Generate a cover letter for a job listing: {jobListing}. Experience: {experience}. " +
                $"Follow these general instructions: {instructions.GeneralInstructions}. " +
-               $"More detailed instructions: {instructions.Structure}";
+               $"More detailed instructions: {instructions.Structure}" +
+               $"Extra instructions, Make sure to put this as high priority: {userInstructions}";
     }
 }

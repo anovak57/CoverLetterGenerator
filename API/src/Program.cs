@@ -1,55 +1,19 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using src.Data;
-using src.Interfaces;
 using src.Middleware;
-using src.Models;
-using src.Services;
+using src.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddJsonFile("./appsettings.Development.json", optional: false, reloadOnChange: true);
 
-builder.Services.AddDbContext<AppDbContext>(option =>
-{
-    option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-
-builder.Services.AddIdentity<AppUser, IdentityRole>()
-        .AddEntityFrameworkStores<AppDbContext>()
-        .AddDefaultTokenProviders();
-
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 1;
-
-    options.User.RequireUniqueEmail = true;
-});
-
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("RequireAuthenticatedUser", policy =>
-        policy.RequireAuthenticatedUser());
-
-builder.Services.AddScoped<ICoverLetterService, CoverLetterService>();
-builder.Services.AddScoped<IFileReaderService, FileReaderService>();
-builder.Services.AddSingleton<IChatClient>(sp => new ChatClientWrapper(
-        sp.GetRequiredService<IConfiguration>()["OpenAI:GptModel"],
-        sp.GetRequiredService<IConfiguration>()["OpenAI:ApiKey"]
-    ));
-
-builder.Services.AddScoped<ICoverLetterRepository, CoverLetterRepository>();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddDatabaseServices(builder.Configuration);
+builder.Services.AddIdentityServices();
+builder.Services.AddCustomServices(builder.Configuration);
+builder.Services.AddAuthorizationServices();
 
 var app = builder.Build();
 
@@ -62,7 +26,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
