@@ -16,24 +16,24 @@ export class OptionsComponent implements OnInit {
   constructor(private userInstructionsService: UserInstructionsService) {}
 
   ngOnInit(): void {
-    this.userInstructionsService.getUserInstructions().subscribe(
-      (response) => {
+    this.userInstructionsService.getUserInstructions().subscribe({
+      next: (response) => {
         this.instructions = response?.instructions || '';
       },
-      (error) => {
+      error: (error) => {
         console.error('Error loading instructions:', error);
       }
-    );
+    });
   }
 
   saveAll() {
-    this.userInstructionsService.saveUserInstructions(this.instructions).subscribe(
-      () => {
+    this.userInstructionsService.saveUserInstructions(this.instructions).subscribe({
+      next: () => {
         console.log('Instructions saved successfully');
       },
-      (error) => {
+      error: (error) => {
         console.error('Error saving instructions:', error);
       }
-    );
+    });
   }
 }

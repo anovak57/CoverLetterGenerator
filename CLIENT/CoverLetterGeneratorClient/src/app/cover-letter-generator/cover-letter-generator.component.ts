@@ -25,15 +25,15 @@ export class CoverLetterGeneratorComponent {
       const requestBody = { jobListing: this.jobListing, experience: this.experience };
 
       this.http.post<any>('http://localhost:5272/api/coverletter/generate', requestBody)
-        .subscribe(
-          response => {
+        .subscribe({
+          next: (response) => {
             console.log(response);
             this.coverLetter = response.coverLetter;
           },
-          error => {
+          error: (error) => {
             console.error('Error generating cover letter:', error);
           }
-        );
+        });
     } else {
       alert('Please provide job listing and experience.');
     }
@@ -48,17 +48,17 @@ export class CoverLetterGeneratorComponent {
       };
 
       this.http.post('http://localhost:5272/api/coverletter/save', coverLetterDto)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.resetForm();
             this.closeModal();
             alert('Cover letter saved successfully.');
           },
-          error => {
+          error: (error) => {
             console.error('Error saving cover letter:', error);
             alert('Failed to save cover letter.');
           }
-        );
+        });
     } else {
       alert('Please enter a title for the cover letter.');
     }

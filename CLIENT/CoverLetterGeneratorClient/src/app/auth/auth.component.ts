@@ -32,28 +32,34 @@ export class AuthComponent {
       }
 
       this.authService.register({ email: this.email, password: this.password, confirmPassword: this.confirmPassword })
-        .subscribe(response => {
-          console.log(response);
-          const token = response.token;
-          this.authService.storeToken(token);
-          alert('Registration successful!');
-          this.router.navigate(['/cover-letter']);
-        }, error => {
-          console.error(error);
-          alert('Registration failed!');
+        .subscribe({
+          next: (response) => {
+            console.log(response);
+            const token = response.token;
+            this.authService.storeToken(token);
+            alert('Registration successful!');
+            this.router.navigate(['/cover-letter']);
+          },
+          error: (error) => {
+            console.error(error);
+            alert('Registration failed!');
+          }
         });
 
     } else {
       this.authService.login({ email: this.email, password: this.password })
-        .subscribe(response => {
-          console.log(response);
-          const token = response.token;
-          this.authService.storeToken(token);
-          alert('Login successful!');
-          this.router.navigate(['/cover-letter']);
-        }, error => {
-          console.error(error);
-          alert('Login failed!');
+        .subscribe({
+          next: (response) => {
+            console.log(response);
+            const token = response.token;
+            this.authService.storeToken(token);
+            alert('Login successful!');
+            this.router.navigate(['/cover-letter']);
+          },
+          error: (error) => {
+            console.error(error);
+            alert('Login failed!');
+          }
         });
     }
   }
