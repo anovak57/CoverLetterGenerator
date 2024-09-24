@@ -16,7 +16,7 @@ public class CoverLetterService : ICoverLetterService
         _configuration = configuration;
     }
 
-    public async Task<string> GenerateCoverLetterAsync(string jobListing, string experience, string userInstructions)
+    public async Task<CoverLetterResponseDto> GenerateCoverLetterAsync(string jobListing, string experience, string userInstructions)
     {
         if (string.IsNullOrWhiteSpace(jobListing))
         {
@@ -32,7 +32,9 @@ public class CoverLetterService : ICoverLetterService
 
         string gptPrompt = BuildGptPrompt(jobListing, experience, defaultInstructions, userInstructions);
 
-        return await _chatClient.CompleteChatAsync(gptPrompt);
+        string gptAnswer = await _chatClient.CompleteChatAsync(gptPrompt);
+
+        return new CoverLetterResponseDto { CoverLetter = gptAnswer };
     }
 
     private async Task<CoverLetterInstructionsDto> GetInstructionsAsync()

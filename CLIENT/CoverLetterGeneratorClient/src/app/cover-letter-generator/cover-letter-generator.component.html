@@ -13,7 +13,7 @@
       <h2>Your Cover Letter</h2>
       <p>{{ coverLetter }}</p>
       <div class="button-container">
-        <button class="save-button" (click)="openModal()">Save</button>
+        <button class="save-button" *ngIf="isLoggedIn()" (click)="openModal()">Save</button>
         <button class="copy-button" (click)="copyToClipboard()">Copy</button>
       </div>
     </div>

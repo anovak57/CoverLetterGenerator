@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgFor } from '@angular/common';
+import { CoverLetterService } from '../services/cover-letter.service';
 
 interface CoverLetter {
   title: string;
-  jobTitle: string;
-  jobDescription: string;
-  content: string;
+  letter: string;
+  jobListing: string;
 }
 
 @Component({
@@ -15,15 +15,29 @@ interface CoverLetter {
   templateUrl: './cover-letter-viewer.component.html',
   styleUrls: ['./cover-letter-viewer.component.css']
 })
-export class CoverLetterViewerComponent {
-  coverLetters: CoverLetter[] = [
-    { title: 'Cover Letter 1', jobTitle: 'Job 1', jobDescription: 'Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 Description 1 ', content: 'Content 1' },
-    { title: 'Cover Letter 2', jobTitle: 'Job 2', jobDescription: 'Description 2', content: 'Content 2' },
-    // Add more cover letters here
-  ];
-
-  selectedCoverLetter: CoverLetter | null = this.coverLetters[0]; // Initialize with the first cover letter
+export class CoverLetterViewerComponent implements OnInit {
+  coverLetters: CoverLetter[] = [];
+  selectedCoverLetter: CoverLetter | null = null;
   showFullJobDescription: boolean = false;
+
+  constructor(private coverLetterService: CoverLetterService) {}
+
+  ngOnInit() {
+    this.loadCoverLetters();
+  }
+
+  loadCoverLetters() {
+    this.coverLetterService.getCoverLetters().subscribe({
+      next: (data) => {
+        this.coverLetters = data;
+        console.log(this.coverLetters)
+        this.selectedCoverLetter = this.coverLetters.length > 0 ? this.coverLetters[0] : null;
+      },
+      error: (err) => {
+        console.error('Error fetching cover letters:', err);
+      }
+    });
+  }
 
   selectCoverLetter(coverLetter: CoverLetter) {
     this.selectedCoverLetter = coverLetter;

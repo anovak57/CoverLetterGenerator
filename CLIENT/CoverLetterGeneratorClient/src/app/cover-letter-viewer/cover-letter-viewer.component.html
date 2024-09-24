@@ -10,17 +10,17 @@
   </div>
   <div class="content">
     <div class="job-listing" [class.expanded]="showFullJobDescription">
-      <h2>{{ selectedCoverLetter?.jobTitle }}</h2>
+      <h2>{{ selectedCoverLetter?.title }}</h2>
       <button class="toggle-button" (click)="toggleJobDescription()">
         <i [class.fa-chevron-up]="showFullJobDescription" 
            [class.fa-chevron-down]="!showFullJobDescription" 
            class="fas"></i>
       </button>
-      <p class="description" *ngIf="showFullJobDescription">{{ selectedCoverLetter?.jobDescription }}</p>
+      <p class="description" *ngIf="showFullJobDescription">{{ selectedCoverLetter?.jobListing }}</p>
     </div>
     <div class="cover-letter">
       <h3>Cover Letter</h3>
-      <p>{{ selectedCoverLetter?.content }}</p>
+      <p>{{ selectedCoverLetter?.letter }}</p>
     </div>
   </div>
 </div>

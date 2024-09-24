@@ -5,6 +5,7 @@ using AutoMapper;
 using src.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace src.Controllers;
 
@@ -41,8 +42,21 @@ public class CoverLetterController : BaseApiController
             return BadRequest("Invalid input");
         }
 
-        var user = await _userManager.GetUserAsync(User);
-        var instructions = user.UserInstructions.Instructions;
+        var userName = User.Identity?.Name;
+        var instructions = "";
+
+        if (userName == null)
+        {
+            instructions = "";
+        }
+        else
+        {
+            var user = await _userManager.Users
+                                        .Include(u => u.UserInstructions)
+                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            instructions = user == null ? "" : user.UserInstructions.Instructions;
+        }
 
         var coverLetter = await _coverLetterService.GenerateCoverLetterAsync(request.JobListing, request.Experience, instructions);
 

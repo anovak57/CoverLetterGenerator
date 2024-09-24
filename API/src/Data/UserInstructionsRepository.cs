@@ -28,7 +28,7 @@ public class UserInstructionsRepository : IUserInstructionsRepository
         _context.CustomUserInstructions.Update(existingInstructions);
     }
 
-    public async void AddAsync (CustomUserInstructions userInstructions)
+    public async Task AddAsync (CustomUserInstructions userInstructions)
     {
         await _context.CustomUserInstructions.AddAsync(userInstructions);
     }

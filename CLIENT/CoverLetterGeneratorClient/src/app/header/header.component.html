@@ -1,9 +1,13 @@
 <header class="header">
-    <a class="home-link" [routerLink]="'/'">Cover Letter Generator</a>
-    <nav class="nav-links">
-      <a href="/user/cover-letters">My Cover Letters</a>
-      <a href="/user/options">Options</a>
-      <a href="#">Logout</a>
-    </nav>
-  </header>
-  
+  <a class="home-link" [routerLink]="authService.isLoggedIn() ? '/cover-letter' : '/'">
+    Cover Letter Generator
+  </a>
+
+  <nav class="nav-links">
+    <a *ngIf="authService.isLoggedIn()" [routerLink]="'/user/cover-letters'">My Cover Letters</a>
+    <a *ngIf="authService.isLoggedIn()" [routerLink]="'/user/options'">Options</a>
+    <a *ngIf="authService.isLoggedIn()" href="#" (click)="logout()">Logout</a>
+
+    <a *ngIf="!authService.isLoggedIn()" [routerLink]="'/'">Login</a>
+  </nav>
+</header>
